@@ -21,20 +21,6 @@
 3. 点击屏幕上的 FPS 显示器打开控制面板
 4. 拖动 FPS 显示器和面板标题栏移动位置
 
-## 模块结构
-
-| 模块 | 说明 |
-|------|------|
-| `Config.lua` | 颜色、默认值配置 |
-| `Core/Sensitivity.lua` | 灵敏度核心 |
-| `Core/Headless.lua` | 无头效果 |
-| `Core/BrokenLegs.lua` | 断腿效果 |
-| `Core/Graphics.lua` | 画质简化 |
-| `Core/Accessories.lua` | 饰品隐藏 |
-| `UI/Toast.lua` | Toast提示 |
-| `UI/PerfButton.lua` | FPS显示按钮 |
-| `UI/UI.lua` | 主面板框架 |
-| `FF/FFlagTool.lua` | FFlag工具 |
 
 ## 许可证
 
