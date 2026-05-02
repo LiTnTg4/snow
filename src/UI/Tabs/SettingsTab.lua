@@ -3,8 +3,8 @@ local M = getgenv().SnowUI
 local SettingsTab = {}
 
 function SettingsTab.Create(parent, Colors, Utils, Toast, Defaults, SavedConfig, Panel, GetDefaultPos)
-    local content, list = nil, nil
-    local WInput, HInput = nil, nil
+    local content
+    local WInput, HInput
     
     local function createContentFrame(contentArea)
         content = Instance.new("ScrollingFrame")
@@ -18,7 +18,7 @@ function SettingsTab.Create(parent, Colors, Utils, Toast, Defaults, SavedConfig,
         content.ZIndex = 22
         content.Parent = contentArea
         
-        list = Instance.new("UIListLayout")
+        local list = Instance.new("UIListLayout")
         list.SortOrder = Enum.SortOrder.LayoutOrder
         list.Padding = UDim.new(0, 8)
         list.Parent = content
@@ -29,6 +29,8 @@ function SettingsTab.Create(parent, Colors, Utils, Toast, Defaults, SavedConfig,
         pad.PaddingRight = UDim.new(0, 4)
         pad.PaddingBottom = UDim.new(0, 4)
         pad.Parent = content
+        
+        content.List = list
     end
     
     local function ApplySize()
@@ -165,17 +167,19 @@ function SettingsTab.Create(parent, Colors, Utils, Toast, Defaults, SavedConfig,
             Toast.Show("尺寸重置", "已恢复默认", 1.5)
         end)
         
-        list:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-            content.CanvasSize = UDim2.new(0, 0, 0, list.AbsoluteContentSize.Y + 8)
-        end)
+        if content.List then
+            content.List:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+                content.CanvasSize = UDim2.new(0, 0, 0, content.List.AbsoluteContentSize.Y + 8)
+            end)
+        end
     end
     
     return {
         createContentFrame=createContentFrame,
         populate=populate,
         updateInputs=function()
-            WInput.Text = tostring(SavedConfig.width)
-            HInput.Text = tostring(SavedConfig.height)
+            if WInput then WInput.Text = tostring(SavedConfig.width) end
+            if HInput then HInput.Text = tostring(SavedConfig.height) end
         end,
     }
 end
