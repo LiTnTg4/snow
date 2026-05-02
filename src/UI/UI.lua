@@ -43,35 +43,119 @@ local function BuildUI(container)
     end
     
     -- 主面板
-    local Panel = Utils.Create("Frame", {
-        Size=UDim2.new(0,SavedConfig.width,0,SavedConfig.height),Position=GetSavedPos(),
-        BackgroundColor3=C.Base,BorderSizePixel=0,Visible=false,ZIndex=20,Parent=container,Corner=10,
-    })
-    Utils.Create("UIStroke", {Color=C.Border,Thickness=1,Transparency=0.4,Parent=Panel})
+    local Panel = Instance.new("Frame")
+    Panel.Size = UDim2.new(0, SavedConfig.width, 0, SavedConfig.height)
+    Panel.Position = GetSavedPos()
+    Panel.BackgroundColor3 = C.Base
+    Panel.BorderSizePixel = 0
+    Panel.Visible = false
+    Panel.ZIndex = 20
+    Panel.Parent = container
+    local pc = Instance.new("UICorner"); pc.CornerRadius = UDim.new(0, 10); pc.Parent = Panel
+    
+    local ps = Instance.new("UIStroke")
+    ps.Color = C.Border; ps.Thickness = 1; ps.Transparency = 0.4; ps.Parent = Panel
     
     -- 标题栏
-    local TitleBar = Utils.Create("Frame", {
-        Size=UDim2.new(1,0,0,40),BackgroundColor3=C.Panel,BorderSizePixel=0,ZIndex=21,Parent=Panel,Corner=10,
-    })
-    Utils.Create("Frame", {Size=UDim2.new(1,0,0.5,0),Position=UDim2.new(0,0,0.5,0),BackgroundColor3=C.Panel,BorderSizePixel=0,ZIndex=21,Parent=TitleBar})
-    Utils.Create("TextLabel", {Size=UDim2.new(0,120,0,20),Position=UDim2.new(0,14,0.5,-10),BackgroundTransparency=1,Text="控制面板",TextColor3=C.Text,TextSize=14,Font=Enum.Font.GothamBold,TextXAlignment=Enum.TextXAlignment.Left,ZIndex=22,Parent=TitleBar})
+    local TitleBar = Instance.new("Frame")
+    TitleBar.Size = UDim2.new(1, 0, 0, 40)
+    TitleBar.BackgroundColor3 = C.Panel
+    TitleBar.BorderSizePixel = 0
+    TitleBar.ZIndex = 21
+    TitleBar.Parent = Panel
+    local tc = Instance.new("UICorner"); tc.CornerRadius = UDim.new(0, 10); tc.Parent = TitleBar
     
-    local NoticeBtn = Utils.Create("TextButton", {Size=UDim2.new(0,56,0,26),Position=UDim2.new(1,-124,0.5,-13),BackgroundColor3=C.Warning,BorderSizePixel=0,Text="公告",TextColor3=Color3.fromRGB(20,20,25),TextSize=12,Font=Enum.Font.GothamBold,AutoButtonColor=false,ZIndex=22,Parent=TitleBar,Corner=6})
+    local tbFix = Instance.new("Frame")
+    tbFix.Size = UDim2.new(1, 0, 0.5, 0)
+    tbFix.Position = UDim2.new(0, 0, 0.5, 0)
+    tbFix.BackgroundColor3 = C.Panel
+    tbFix.BorderSizePixel = 0
+    tbFix.ZIndex = 21
+    tbFix.Parent = TitleBar
     
-    -- 关闭按钮 - 修复：确保是TextButton
-    local CloseBtn = Utils.Create("TextButton", {Size=UDim2.new(0,28,0,28),Position=UDim2.new(1,-38,0.5,-14),BackgroundColor3=C.Element,BorderSizePixel=0,Text="X",TextColor3=C.TextDim,TextSize=14,Font=Enum.Font.GothamMedium,AutoButtonColor=false,ZIndex=22,Parent=TitleBar,Corner=14})
-    CloseBtn.MouseEnter:Connect(function() Utils.Tween(CloseBtn,{BackgroundColor3=C.Danger},0.15) end)
-    CloseBtn.MouseLeave:Connect(function() Utils.Tween(CloseBtn,{BackgroundColor3=C.Element},0.15) end)
+    local titleLabel = Instance.new("TextLabel")
+    titleLabel.Size = UDim2.new(0, 120, 0, 20)
+    titleLabel.Position = UDim2.new(0, 14, 0.5, -10)
+    titleLabel.BackgroundTransparency = 1
+    titleLabel.Text = "控制面板"
+    titleLabel.TextColor3 = C.Text
+    titleLabel.TextSize = 14
+    titleLabel.Font = Enum.Font.GothamBold
+    titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    titleLabel.ZIndex = 22
+    titleLabel.Parent = TitleBar
+    
+    local NoticeBtn = Instance.new("TextButton")
+    NoticeBtn.Size = UDim2.new(0, 56, 0, 26)
+    NoticeBtn.Position = UDim2.new(1, -124, 0.5, -13)
+    NoticeBtn.BackgroundColor3 = C.Warning
+    NoticeBtn.BorderSizePixel = 0
+    NoticeBtn.Text = "公告"
+    NoticeBtn.TextColor3 = Color3.fromRGB(20, 20, 25)
+    NoticeBtn.TextSize = 12
+    NoticeBtn.Font = Enum.Font.GothamBold
+    NoticeBtn.AutoButtonColor = false
+    NoticeBtn.ZIndex = 22
+    NoticeBtn.Parent = TitleBar
+    local nc = Instance.new("UICorner"); nc.CornerRadius = UDim.new(0, 6); nc.Parent = NoticeBtn
+    
+    local CloseBtn = Instance.new("TextButton")
+    CloseBtn.Size = UDim2.new(0, 28, 0, 28)
+    CloseBtn.Position = UDim2.new(1, -38, 0.5, -14)
+    CloseBtn.BackgroundColor3 = C.Element
+    CloseBtn.BorderSizePixel = 0
+    CloseBtn.Text = "X"
+    CloseBtn.TextColor3 = C.TextDim
+    CloseBtn.TextSize = 14
+    CloseBtn.Font = Enum.Font.GothamMedium
+    CloseBtn.AutoButtonColor = false
+    CloseBtn.ZIndex = 22
+    CloseBtn.Parent = TitleBar
+    local clc = Instance.new("UICorner"); clc.CornerRadius = UDim.new(0, 14); clc.Parent = CloseBtn
+    
+    CloseBtn.MouseEnter:Connect(function() Utils.Tween(CloseBtn, {BackgroundColor3=C.Danger}, 0.15) end)
+    CloseBtn.MouseLeave:Connect(function() Utils.Tween(CloseBtn, {BackgroundColor3=C.Element}, 0.15) end)
     
     -- 标签栏
-    local TabBar = Utils.Create("Frame", {Size=UDim2.new(1,0,0,42),Position=UDim2.new(0,0,0,40),BackgroundColor3=C.Panel,BorderSizePixel=0,ZIndex=21,Parent=Panel})
-    Utils.Create("Frame", {Size=UDim2.new(1,0,0,1),Position=UDim2.new(0,0,1,-1),BackgroundColor3=C.Border,BorderSizePixel=0,ZIndex=22,Parent=TabBar})
-    local TabContainer = Utils.Create("Frame", {Size=UDim2.new(0,0,1,0),Position=UDim2.new(0,14,0,0),BackgroundTransparency=1,ZIndex=22,Parent=TabBar})
-    Utils.Create("UIListLayout", {FillDirection=Enum.FillDirection.Horizontal,SortOrder=Enum.SortOrder.LayoutOrder,Padding=UDim.new(0,6),VerticalAlignment=Enum.VerticalAlignment.Center,Parent=TabContainer})
+    local TabBar = Instance.new("Frame")
+    TabBar.Size = UDim2.new(1, 0, 0, 42)
+    TabBar.Position = UDim2.new(0, 0, 0, 40)
+    TabBar.BackgroundColor3 = C.Panel
+    TabBar.BorderSizePixel = 0
+    TabBar.ZIndex = 21
+    TabBar.Parent = Panel
     
-    local ContentArea = Utils.Create("Frame", {Size=UDim2.new(1,0,1,-82),Position=UDim2.new(0,0,0,82),BackgroundColor3=C.Base,BorderSizePixel=0,ZIndex=21,Parent=Panel})
+    local tabDiv = Instance.new("Frame")
+    tabDiv.Size = UDim2.new(1, 0, 0, 1)
+    tabDiv.Position = UDim2.new(0, 0, 1, -1)
+    tabDiv.BackgroundColor3 = C.Border
+    tabDiv.BorderSizePixel = 0
+    tabDiv.ZIndex = 22
+    tabDiv.Parent = TabBar
     
-    -- 标签按钮 - 修复：确保是TextButton类型，不是Frame
+    local TabContainer = Instance.new("Frame")
+    TabContainer.Size = UDim2.new(0, 0, 1, 0)
+    TabContainer.Position = UDim2.new(0, 14, 0, 0)
+    TabContainer.BackgroundTransparency = 1
+    TabContainer.ZIndex = 22
+    TabContainer.Parent = TabBar
+    
+    local tabLayout = Instance.new("UIListLayout")
+    tabLayout.FillDirection = Enum.FillDirection.Horizontal
+    tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    tabLayout.Padding = UDim.new(0, 6)
+    tabLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+    tabLayout.Parent = TabContainer
+    
+    local ContentArea = Instance.new("Frame")
+    ContentArea.Size = UDim2.new(1, 0, 1, -82)
+    ContentArea.Position = UDim2.new(0, 0, 0, 82)
+    ContentArea.BackgroundColor3 = C.Base
+    ContentArea.BorderSizePixel = 0
+    ContentArea.ZIndex = 21
+    ContentArea.Parent = Panel
+    
+    -- 标签按钮 - 全部用Instance.new确保类型正确
     for i, id in ipairs(Config.TabIDs) do
         local btn = Instance.new("TextButton")
         btn.Size = UDim2.new(0, 60, 0, 32)
@@ -84,16 +168,17 @@ local function BuildUI(container)
         btn.AutoButtonColor = false
         btn.ZIndex = 22
         btn.Parent = TabContainer
-        
-        local btnCorner = Instance.new("UICorner")
-        btnCorner.CornerRadius = UDim.new(0, 6)
-        btnCorner.Parent = btn
+        local bc = Instance.new("UICorner"); bc.CornerRadius = UDim.new(0, 6); bc.Parent = btn
         
         btn.MouseEnter:Connect(function() if id~=currentTab then Utils.Tween(btn,{BackgroundColor3=C.Hover},0.15) end end)
         btn.MouseLeave:Connect(function() if id~=currentTab then Utils.Tween(btn,{BackgroundColor3=C.Panel},0.15) end end)
         btn.MouseButton1Click:Connect(function() SwitchTab(id) end)
         tabBtns[id] = btn
     end
+    
+    tabLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+        TabContainer.Size = UDim2.new(0, tabLayout.AbsoluteContentSize.X, 1, 0)
+    end)
     
     -- 加载标签页
     local tabs = {}
@@ -117,14 +202,15 @@ local function BuildUI(container)
     -- 公告
     local notice = M.Notice.Create(Panel, C, Utils)
     NoticeBtn.MouseButton1Click:Connect(function()
-        notice.setText("Snow UI v4.0\n\n模块化设计\n按住标题栏拖动\nFPS按钮点击打开\n\n屏幕: "..ScreenW.."x"..ScreenH)
+        notice.setText("Snow UI v4.0\n\nFPS按钮点击打开菜单\n标题栏拖动移动\n模块化设计\n\n屏幕: "..ScreenW.."x"..ScreenH)
         notice.show()
     end)
     
     -- 拖动
     TitleBar.InputBegan:Connect(function(input)
         if input.UserInputType==Enum.UserInputType.MouseButton1 or input.UserInputType==Enum.UserInputType.Touch then
-            dragState.active=true; dragState.startMouse=game:GetService("UserInputService"):GetMouseLocation()
+            dragState.active=true
+            dragState.startMouse=game:GetService("UserInputService"):GetMouseLocation()
             dragState.startPos=Vector2.new(Panel.AbsolutePosition.X,Panel.AbsolutePosition.Y)
         end
     end)
@@ -135,13 +221,15 @@ local function BuildUI(container)
             local delta=mouse-dragState.startMouse
             local nx=math.clamp(dragState.startPos.X+delta.X,0,ScreenW-Panel.AbsoluteSize.X)
             local ny=math.clamp(dragState.startPos.Y+delta.Y,0,ScreenH-40)
-            Panel.Position=UDim2.new(0,nx,0,ny); SavedConfig.posX,SavedConfig.posY=nx,ny
+            Panel.Position=UDim2.new(0,nx,0,ny)
+            SavedConfig.posX,SavedConfig.posY=nx,ny
         end
         if sliderState.active and (input.UserInputType==Enum.UserInputType.MouseMovement or input.UserInputType==Enum.UserInputType.Touch) then
             local mx=game:GetService("UserInputService"):GetMouseLocation().X
             local r=math.clamp((mx-sliderState.track.AbsolutePosition.X)/sliderState.track.AbsoluteSize.X,0,1)
             local v=sliderState.min+(sliderState.max-sliderState.min)*r
-            sliderState.fill.Size=UDim2.new(r,0,1,0); sliderState.handle.Position=UDim2.new(r,-10,0.5,-10)
+            sliderState.fill.Size=UDim2.new(r,0,1,0)
+            sliderState.handle.Position=UDim2.new(r,-10,0.5,-10)
             sliderState.valueLabel.Text=string.format("%.1f",v)
             if sliderState.callback then sliderState.callback(v) end
         end
@@ -154,9 +242,10 @@ local function BuildUI(container)
     end)
     
     return {
-        Panel=Panel,CloseBtn=CloseBtn,SavedConfig=SavedConfig,SwitchTab=SwitchTab,
+        Panel=Panel, CloseBtn=CloseBtn, SavedConfig=SavedConfig, SwitchTab=SwitchTab,
         Open=function()
-            menuVisible=true; Panel.Visible=true; Panel.Position=GetSavedPos(); Panel.Size=UDim2.new(0,0,0,0)
+            menuVisible=true; Panel.Visible=true
+            Panel.Position=GetSavedPos(); Panel.Size=UDim2.new(0,0,0,0)
             Utils.Tween(Panel,{Size=UDim2.new(0,SavedConfig.width,0,SavedConfig.height)},0.3,Enum.EasingStyle.Quart)
             tabs.sensitivity.update(SavedConfig.sensitivity)
             tabs.accessories.refreshAll(); tabs.settings.updateInputs()
