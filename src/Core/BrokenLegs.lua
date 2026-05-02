@@ -1,8 +1,9 @@
--- 断腿系统
+getgenv().SnowUI = getgenv().SnowUI or {}
+getgenv().SnowUI.BrokenLegs = {}
+local BrokenLegs = getgenv().SnowUI.BrokenLegs
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
-local BrokenLegs = {}
 local state = { r6 = false, r15 = false, r6Part = nil, r15Part = nil }
 
 local function findPart(container, names)
@@ -35,9 +36,7 @@ function BrokenLegs.ToggleR6()
     state.r6 = not state.r6
     local player = Players.LocalPlayer
     if state.r6 then
-        if player.Character then
-            state.r6Part = createMeshPart("R6BrokenLeg")
-        end
+        if player.Character then state.r6Part = createMeshPart("R6BrokenLeg") end
     else
         if state.r6Part then state.r6Part:Destroy(); state.r6Part = nil end
     end
@@ -48,9 +47,7 @@ function BrokenLegs.ToggleR15()
     state.r15 = not state.r15
     local player = Players.LocalPlayer
     if state.r15 then
-        if player.Character then
-            state.r15Part = createMeshPart("R15BrokenLeg")
-        end
+        if player.Character then state.r15Part = createMeshPart("R15BrokenLeg") end
     else
         if state.r15Part then state.r15Part:Destroy(); state.r15Part = nil end
     end
@@ -59,11 +56,9 @@ end
 
 function BrokenLegs.Init()
     local player = Players.LocalPlayer
-    
     RunService.Heartbeat:Connect(function()
         local c = player.Character
         if not c then return end
-        
         if state.r6 and state.r6Part then
             local upper = findPart(c, {"RightUpperLeg", "Right Leg"})
             if upper then state.r6Part.CFrame = upper.CFrame * CFrame.new(0, 0.7, 0) end
@@ -71,7 +66,6 @@ function BrokenLegs.Init()
             local l = findPart(c, {"RightLowerLeg"}); if l then l.Transparency = 1; l.CanCollide = false end
             local f = findPart(c, {"RightFoot", "Right Foot"}); if f then f.Transparency = 1; f.CanCollide = false end
         end
-        
         if state.r15 and state.r15Part then
             local upper = findPart(c, {"RightUpperLeg"})
             if upper then state.r15Part.CFrame = upper.CFrame * CFrame.new(0, 0.19, 0) end
@@ -80,12 +74,9 @@ function BrokenLegs.Init()
             local f = findPart(c, {"RightFoot", "Right Foot"}); if f then f.Transparency = 1 end
         end
     end)
-    
     player.CharacterAdded:Connect(function(c)
         task.wait(0.5)
         if state.r6 then state.r6Part = createMeshPart("R6BrokenLeg") end
         if state.r15 then state.r15Part = createMeshPart("R15BrokenLeg") end
     end)
 end
-
-return BrokenLegs
