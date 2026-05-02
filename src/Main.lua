@@ -4,6 +4,19 @@ local PlayerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
 
 getgenv().SnowUI = getgenv().SnowUI or {}
 
+-- 清理所有旧UI
+local oldMinimal = PlayerGui:FindFirstChild("MinimalUI")
+if oldMinimal then oldMinimal:Destroy() end
+
+local oldAccessory = PlayerGui:FindFirstChild("AccessoryToggleGui")
+if oldAccessory then oldAccessory:Destroy() end
+
+local oldPerf = PlayerGui:FindFirstChild("PerfMonitor")
+if oldPerf then oldPerf:Destroy() end
+
+local oldFFlag = PlayerGui:FindFirstChild("FFlagPasteTool")
+if oldFFlag then oldFFlag:Destroy() end
+
 local baseURL = "https://raw.githubusercontent.com/LiTnTg4/snow/main/src"
 
 local loadOrder = {
@@ -31,9 +44,6 @@ end
 
 task.wait(1)
 local M = getgenv().SnowUI
-
-local old = PlayerGui:FindFirstChild("MinimalUI")
-if old then old:Destroy() end
 
 local UI = Instance.new("ScreenGui")
 UI.Name = "MinimalUI"; UI.Parent = PlayerGui
