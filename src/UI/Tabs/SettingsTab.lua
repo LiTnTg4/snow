@@ -56,19 +56,41 @@ function SettingsTab.Create(parent, Colors, Utils, Toast, Defaults, SavedConfig,
         Utils.Create("TextLabel", {Size=UDim2.new(0,40,0,16),Position=UDim2.new(0,170,0,56),BackgroundTransparency=1,Text="高度",TextColor3=Colors.TextDim,TextSize=11,Font=Enum.Font.Gotham,ZIndex=24,Parent=card})
         HInput = Utils.Create("TextBox", {Size=UDim2.new(0,90,0,30),Position=UDim2.new(0,210,0,52),BackgroundColor3=Colors.Base,BorderSizePixel=0,Text=tostring(SavedConfig.height),TextColor3=Colors.Text,TextSize=12,Font=Enum.Font.Gotham,ZIndex=24,Parent=card,Corner=4})
         
-        Utils.Create("TextButton", {
-            Size = UDim2.new(0, 90, 0, 32), Position = UDim2.new(0, 14, 0, 92),
-            BackgroundColor3 = Colors.Accent, BorderSizePixel = 0, Text = "应用尺寸",
-            TextColor3 = Color3.new(1, 1, 1), TextSize = 12, Font = Enum.Font.GothamBold,
-            AutoButtonColor = false, ZIndex = 24, Parent = card, Corner = 4,
-        }).MouseButton1Click:Connect(ApplySize)
+        -- 应用按钮 - 直接用Instance.new确保类型正确
+        local applyBtn = Instance.new("TextButton")
+        applyBtn.Size = UDim2.new(0, 90, 0, 32)
+        applyBtn.Position = UDim2.new(0, 14, 0, 92)
+        applyBtn.BackgroundColor3 = Colors.Accent
+        applyBtn.BorderSizePixel = 0
+        applyBtn.Text = "应用尺寸"
+        applyBtn.TextColor3 = Color3.new(1, 1, 1)
+        applyBtn.TextSize = 12
+        applyBtn.Font = Enum.Font.GothamBold
+        applyBtn.AutoButtonColor = false
+        applyBtn.ZIndex = 24
+        applyBtn.Parent = card
+        local applyCorner = Instance.new("UICorner")
+        applyCorner.CornerRadius = UDim.new(0, 4)
+        applyCorner.Parent = applyBtn
+        applyBtn.MouseButton1Click:Connect(ApplySize)
         
-        Utils.Create("TextButton", {
-            Size = UDim2.new(0, 90, 0, 32), Position = UDim2.new(0, 112, 0, 92),
-            BackgroundColor3 = Colors.Element, BorderSizePixel = 0, Text = "重置默认",
-            TextColor3 = Colors.TextDim, TextSize = 12, Font = Enum.Font.Gotham,
-            AutoButtonColor = false, ZIndex = 24, Parent = card, Corner = 4,
-        }).MouseButton1Click:Connect(function()
+        -- 重置按钮 - 直接用Instance.new确保类型正确
+        local resetBtn = Instance.new("TextButton")
+        resetBtn.Size = UDim2.new(0, 90, 0, 32)
+        resetBtn.Position = UDim2.new(0, 112, 0, 92)
+        resetBtn.BackgroundColor3 = Colors.Element
+        resetBtn.BorderSizePixel = 0
+        resetBtn.Text = "重置默认"
+        resetBtn.TextColor3 = Colors.TextDim
+        resetBtn.TextSize = 12
+        resetBtn.Font = Enum.Font.Gotham
+        resetBtn.AutoButtonColor = false
+        resetBtn.ZIndex = 24
+        resetBtn.Parent = card
+        local resetCorner = Instance.new("UICorner")
+        resetCorner.CornerRadius = UDim.new(0, 4)
+        resetCorner.Parent = resetBtn
+        resetBtn.MouseButton1Click:Connect(function()
             local defaultW = math.clamp(math.floor(ScreenW * 0.45), Defaults.MinWidth, Defaults.MaxWidth)
             local defaultH = math.clamp(math.floor(ScreenH * 0.55), Defaults.MinHeight, Defaults.MaxHeight)
             SavedConfig.width, SavedConfig.height = defaultW, defaultH
