@@ -36,10 +36,12 @@ function Sensitivity.Init()
             end
         end
     end
-    local oldIndex = hookmetamethod(game, "__index", function(self, key)
-        if self == UserInputService and key == "MouseDelta" and UserInputService.TouchEnabled then
-            return oldIndex(self, key) * currentSensitivity
-        end
-        return oldIndex(self, key)
+    pcall(function()
+        local oldIndex = hookmetamethod(game, "__index", function(self, key)
+            if self == UserInputService and key == "MouseDelta" and UserInputService.TouchEnabled then
+                return oldIndex(self, key) * currentSensitivity
+            end
+            return oldIndex(self, key)
+        end)
     end)
 end
