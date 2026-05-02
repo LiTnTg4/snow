@@ -3,7 +3,7 @@ local M = getgenv().SnowUI
 local FunctionsTab = {}
 
 function FunctionsTab.Create(parent, Colors, Utils, Toast, Headless, BrokenLegs, Graphics, SwitchTabFn)
-    local content, list = nil, nil
+    local content
     
     local function createContentFrame(contentArea)
         content = Instance.new("ScrollingFrame")
@@ -17,7 +17,7 @@ function FunctionsTab.Create(parent, Colors, Utils, Toast, Headless, BrokenLegs,
         content.ZIndex = 22
         content.Parent = contentArea
         
-        list = Instance.new("UIListLayout")
+        local list = Instance.new("UIListLayout")
         list.SortOrder = Enum.SortOrder.LayoutOrder
         list.Padding = UDim.new(0, 8)
         list.Parent = content
@@ -28,21 +28,24 @@ function FunctionsTab.Create(parent, Colors, Utils, Toast, Headless, BrokenLegs,
         pad.PaddingRight = UDim.new(0, 4)
         pad.PaddingBottom = UDim.new(0, 4)
         pad.Parent = content
+        
+        -- 存储list引用用于更新CanvasSize
+        content.List = list
     end
     
     local function populate()
         local items = {
             {title="无头",desc="隐藏角色头部和脸部",action=function()
-                local active = Headless.Toggle(); Toast.Show("无头", active and "已开启" or "已关闭", 2)
+                Headless.Toggle(); Toast.Show("无头", Headless.IsActive() and "已开启" or "已关闭", 2)
             end},
             {title="R6断腿",desc="仅R6角色可用",action=function()
-                local active = BrokenLegs.ToggleR6(); Toast.Show("R6断腿", active and "已开启" or "已关闭", 1.5)
+                local a = BrokenLegs.ToggleR6(); Toast.Show("R6断腿", a and "已开启" or "已关闭", 1.5)
             end},
             {title="R15断腿",desc="仅R15角色可用",action=function()
-                local active = BrokenLegs.ToggleR15(); Toast.Show("R15断腿", active and "已开启" or "已关闭", 1.5)
+                local a = BrokenLegs.ToggleR15(); Toast.Show("R15断腿", a and "已开启" or "已关闭", 1.5)
             end},
             {title="画质简化",desc="降低画质提升性能",action=function()
-                local active = Graphics.Toggle(); Toast.Show("画质简化", active and "已开启" or "已关闭", 1.5)
+                local a = Graphics.Toggle(); Toast.Show("画质简化", a and "已开启" or "已关闭", 1.5)
             end},
             {title="隐藏饰品",desc="在饰品标签页设置",action=function()
                 SwitchTabFn("accessories"); Toast.Show("隐藏饰品", "请在饰品标签页中选择", 2)
@@ -104,9 +107,11 @@ function FunctionsTab.Create(parent, Colors, Utils, Toast, Headless, BrokenLegs,
             end)
         end
         
-        list:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-            content.CanvasSize = UDim2.new(0, 0, 0, list.AbsoluteContentSize.Y + 8)
-        end)
+        if content.List then
+            content.List:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+                content.CanvasSize = UDim2.new(0, 0, 0, content.List.AbsoluteContentSize.Y + 8)
+            end)
+        end
     end
     
     return {createContentFrame = createContentFrame, populate = populate}
