@@ -30,9 +30,7 @@ function Accessories.ApplyType(accType, isVisible)
         if child:IsA("Accessory") and child.AccessoryType == accType then
             pcall(function()
                 local handle = child:FindFirstChild("Handle")
-                if handle then
-                    handle.Transparency = isVisible and 0 or 1
-                end
+                if handle then handle.Transparency = isVisible and 0 or 1 end
             end)
         end
     end
@@ -46,9 +44,7 @@ function Accessories.RefreshAll()
             if child:IsA("Accessory") and child.AccessoryType == config.type then
                 pcall(function()
                     local handle = child:FindFirstChild("Handle")
-                    if handle then
-                        handle.Transparency = visibility[config.type] and 0 or 1
-                    end
+                    if handle then handle.Transparency = visibility[config.type] and 0 or 1 end
                 end)
             end
         end
