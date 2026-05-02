@@ -3,8 +3,8 @@ local M = getgenv().SnowUI
 local SensitivityTab = {}
 
 function SensitivityTab.Create(parent, Colors, Utils, Config, Sensitivity, SavedConfig, sliderState)
-    local content, list = nil, nil
-    local SensFill, SensHandle, SensValue, SensTrack = nil, nil, nil, nil
+    local content
+    local SensFill, SensHandle, SensValue, SensTrack
     
     local function createContentFrame(contentArea)
         content = Instance.new("ScrollingFrame")
@@ -18,7 +18,7 @@ function SensitivityTab.Create(parent, Colors, Utils, Config, Sensitivity, Saved
         content.ZIndex = 22
         content.Parent = contentArea
         
-        list = Instance.new("UIListLayout")
+        local list = Instance.new("UIListLayout")
         list.SortOrder = Enum.SortOrder.LayoutOrder
         list.Padding = UDim.new(0, 8)
         list.Parent = content
@@ -29,6 +29,8 @@ function SensitivityTab.Create(parent, Colors, Utils, Config, Sensitivity, Saved
         pad.PaddingRight = UDim.new(0, 4)
         pad.PaddingBottom = UDim.new(0, 4)
         pad.Parent = content
+        
+        content.List = list
     end
     
     local function UpdateSensitivity(value)
@@ -36,9 +38,9 @@ function SensitivityTab.Create(parent, Colors, Utils, Config, Sensitivity, Saved
         SavedConfig.sensitivity = clamped
         Sensitivity.Set(clamped)
         local r = (clamped - Config.SensitivityMin) / (Config.SensitivityMax - Config.SensitivityMin)
-        SensFill.Size = UDim2.new(r, 0, 1, 0)
-        SensHandle.Position = UDim2.new(r, -10, 0.5, -10)
-        SensValue.Text = string.format("%.1f", clamped)
+        if SensFill then SensFill.Size = UDim2.new(r, 0, 1, 0) end
+        if SensHandle then SensHandle.Position = UDim2.new(r, -10, 0.5, -10) end
+        if SensValue then SensValue.Text = string.format("%.1f", clamped) end
     end
     
     local function populate()
@@ -145,9 +147,11 @@ function SensitivityTab.Create(parent, Colors, Utils, Config, Sensitivity, Saved
             end
         end)
         
-        list:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-            content.CanvasSize = UDim2.new(0, 0, 0, list.AbsoluteContentSize.Y + 8)
-        end)
+        if content.List then
+            content.List:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+                content.CanvasSize = UDim2.new(0, 0, 0, content.List.AbsoluteContentSize.Y + 8)
+            end)
+        end
     end
     
     return {createContentFrame=createContentFrame, populate=populate, update=UpdateSensitivity}
