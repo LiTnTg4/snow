@@ -1,50 +1,44 @@
--- 配置文件：颜色主题、默认值
-local Config = {}
-
-Config.Colors = {
-    Base = Color3.fromRGB(14, 14, 18),
-    Panel = Color3.fromRGB(20, 20, 26),
-    Element = Color3.fromRGB(28, 28, 34),
-    Hover = Color3.fromRGB(36, 36, 44),
-    Active = Color3.fromRGB(40, 40, 50),
-    Border = Color3.fromRGB(38, 38, 46),
-    Text = Color3.fromRGB(210, 210, 220),
-    TextDim = Color3.fromRGB(145, 145, 155),
-    TextMuted = Color3.fromRGB(100, 100, 110),
-    Accent = Color3.fromRGB(100, 130, 255),
-    Success = Color3.fromRGB(80, 200, 120),
-    Danger = Color3.fromRGB(255, 80, 80),
-    Warning = Color3.fromRGB(255, 170, 50),
-    SliderTrack = Color3.fromRGB(50, 50, 58),
-    SliderFill = Color3.fromRGB(100, 130, 255),
+getgenv().SnowUI = getgenv().SnowUI or {}
+getgenv().SnowUI.Config = {
+    Colors = {
+        Base = Color3.fromRGB(14, 14, 18),
+        Panel = Color3.fromRGB(20, 20, 26),
+        Element = Color3.fromRGB(28, 28, 34),
+        Hover = Color3.fromRGB(36, 36, 44),
+        Active = Color3.fromRGB(40, 40, 50),
+        Border = Color3.fromRGB(38, 38, 46),
+        Text = Color3.fromRGB(210, 210, 220),
+        TextDim = Color3.fromRGB(145, 145, 155),
+        TextMuted = Color3.fromRGB(100, 100, 110),
+        Accent = Color3.fromRGB(100, 130, 255),
+        Success = Color3.fromRGB(80, 200, 120),
+        Danger = Color3.fromRGB(255, 80, 80),
+        Warning = Color3.fromRGB(255, 170, 50),
+        SliderTrack = Color3.fromRGB(50, 50, 58),
+        SliderFill = Color3.fromRGB(100, 130, 255),
+    },
+    Defaults = {
+        PanelWidth = 640,
+        PanelHeight = 420,
+        Sensitivity = 1,
+        MinWidth = 400,
+        MaxWidth = 1200,
+        MinHeight = 280,
+        MaxHeight = 800,
+    },
+    SlotTypes = {
+        { name = "头发", type = Enum.AccessoryType.Hair },
+        { name = "帽子", type = Enum.AccessoryType.Hat },
+        { name = "面部", type = Enum.AccessoryType.Face },
+        { name = "颈部", type = Enum.AccessoryType.Neck },
+        { name = "肩部", type = Enum.AccessoryType.Shoulder },
+        { name = "胸部", type = Enum.AccessoryType.Front },
+        { name = "背部", type = Enum.AccessoryType.Back },
+        { name = "腰部", type = Enum.AccessoryType.Waist },
+    },
+    SensitivityPresets = {0.5, 1, 2, 5},
+    SensitivityMin = 0.1,
+    SensitivityMax = 10,
+    TabNames = {"功能", "FFlag", "灵敏度", "饰品", "设置"},
+    TabIDs = {"normal", "ff", "sensitivity", "accessories", "settings"},
 }
-
-Config.Defaults = {
-    PanelWidth = 640,
-    PanelHeight = 420,
-    Sensitivity = 1,
-    MinWidth = 400,
-    MaxWidth = 1200,
-    MinHeight = 280,
-    MaxHeight = 800,
-}
-
-Config.SlotTypes = {
-    { name = "头发", type = Enum.AccessoryType.Hair },
-    { name = "帽子", type = Enum.AccessoryType.Hat },
-    { name = "面部", type = Enum.AccessoryType.Face },
-    { name = "颈部", type = Enum.AccessoryType.Neck },
-    { name = "肩部", type = Enum.AccessoryType.Shoulder },
-    { name = "胸部", type = Enum.AccessoryType.Front },
-    { name = "背部", type = Enum.AccessoryType.Back },
-    { name = "腰部", type = Enum.AccessoryType.Waist },
-}
-
-Config.SensitivityPresets = {0.5, 1, 2, 5}
-Config.SensitivityMin = 0.1
-Config.SensitivityMax = 10
-
-Config.TabNames = {"功能", "FFlag", "灵敏度", "饰品", "设置"}
-Config.TabIDs = {"normal", "ff", "sensitivity", "accessories", "settings"}
-
-return Config
