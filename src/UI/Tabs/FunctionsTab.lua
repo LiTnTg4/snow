@@ -6,14 +6,28 @@ function FunctionsTab.Create(parent, Colors, Utils, Toast, Headless, BrokenLegs,
     local content, list = nil, nil
     
     local function createContentFrame(contentArea)
-        content = Utils.Create("ScrollingFrame", {
-            Size = UDim2.new(1, -16, 1, -16), Position = UDim2.new(0, 8, 0, 8),
-            BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 3,
-            ScrollBarImageColor3 = Colors.Element, CanvasSize = UDim2.new(0, 0, 0, 0),
-            ZIndex = 22, Parent = contentArea,
-        })
-        list = Utils.Create("UIListLayout", {SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 8), Parent = content})
-        Utils.Create("UIPadding", {PaddingTop=UDim.new(0,4),PaddingLeft=UDim.new(0,4),PaddingRight=UDim.new(0,4),PaddingBottom=UDim.new(0,4), Parent = content})
+        content = Instance.new("ScrollingFrame")
+        content.Size = UDim2.new(1, -16, 1, -16)
+        content.Position = UDim2.new(0, 8, 0, 8)
+        content.BackgroundTransparency = 1
+        content.BorderSizePixel = 0
+        content.ScrollBarThickness = 3
+        content.ScrollBarImageColor3 = Colors.Element
+        content.CanvasSize = UDim2.new(0, 0, 0, 0)
+        content.ZIndex = 22
+        content.Parent = contentArea
+        
+        list = Instance.new("UIListLayout")
+        list.SortOrder = Enum.SortOrder.LayoutOrder
+        list.Padding = UDim.new(0, 8)
+        list.Parent = content
+        
+        local pad = Instance.new("UIPadding")
+        pad.PaddingTop = UDim.new(0, 4)
+        pad.PaddingLeft = UDim.new(0, 4)
+        pad.PaddingRight = UDim.new(0, 4)
+        pad.PaddingBottom = UDim.new(0, 4)
+        pad.Parent = content
     end
     
     local function populate()
@@ -36,19 +50,57 @@ function FunctionsTab.Create(parent, Colors, Utils, Toast, Headless, BrokenLegs,
         }
         
         for _, item in ipairs(items) do
-            local card = Utils.Create("TextButton", {
-                Size = UDim2.new(1, 0, 0, 48), BackgroundColor3 = Colors.Element,
-                BorderSizePixel = 0, Text = "", AutoButtonColor = false, ZIndex = 23, Parent = content, Corner = 6,
-            })
-            Utils.Create("Frame", {Size=UDim2.new(0,4,1,-16),Position=UDim2.new(0,12,0,8),BackgroundColor3=Colors.Accent,BackgroundTransparency=0.5,BorderSizePixel=0,ZIndex=24,Parent=card,Corner=2})
-            Utils.Create("TextLabel", {Size=UDim2.new(0,160,0,16),Position=UDim2.new(0,24,0,8),BackgroundTransparency=1,Text=item.title,TextColor3=Colors.Text,TextSize=13,Font=Enum.Font.GothamBold,TextXAlignment=Enum.TextXAlignment.Left,ZIndex=24,Parent=card})
-            Utils.Create("TextLabel", {Size=UDim2.new(0,200,0,14),Position=UDim2.new(0,24,0,26),BackgroundTransparency=1,Text=item.desc,TextColor3=Colors.TextMuted,TextSize=11,Font=Enum.Font.Gotham,TextXAlignment=Enum.TextXAlignment.Left,ZIndex=24,Parent=card})
+            local card = Instance.new("TextButton")
+            card.Size = UDim2.new(1, 0, 0, 48)
+            card.BackgroundColor3 = Colors.Element
+            card.BorderSizePixel = 0
+            card.Text = ""
+            card.AutoButtonColor = false
+            card.ZIndex = 23
+            card.Parent = content
+            local cc = Instance.new("UICorner"); cc.CornerRadius = UDim.new(0, 6); cc.Parent = card
+            
+            local bar = Instance.new("Frame")
+            bar.Size = UDim2.new(0, 4, 1, -16)
+            bar.Position = UDim2.new(0, 12, 0, 8)
+            bar.BackgroundColor3 = Colors.Accent
+            bar.BackgroundTransparency = 0.5
+            bar.BorderSizePixel = 0
+            bar.ZIndex = 24
+            bar.Parent = card
+            local bc = Instance.new("UICorner"); bc.CornerRadius = UDim.new(0, 2); bc.Parent = bar
+            
+            local title = Instance.new("TextLabel")
+            title.Size = UDim2.new(0, 160, 0, 16)
+            title.Position = UDim2.new(0, 24, 0, 8)
+            title.BackgroundTransparency = 1
+            title.Text = item.title
+            title.TextColor3 = Colors.Text
+            title.TextSize = 13
+            title.Font = Enum.Font.GothamBold
+            title.TextXAlignment = Enum.TextXAlignment.Left
+            title.ZIndex = 24
+            title.Parent = card
+            
+            local desc = Instance.new("TextLabel")
+            desc.Size = UDim2.new(0, 200, 0, 14)
+            desc.Position = UDim2.new(0, 24, 0, 26)
+            desc.BackgroundTransparency = 1
+            desc.Text = item.desc
+            desc.TextColor3 = Colors.TextMuted
+            desc.TextSize = 11
+            desc.Font = Enum.Font.Gotham
+            desc.TextXAlignment = Enum.TextXAlignment.Left
+            desc.ZIndex = 24
+            desc.Parent = card
+            
             card.MouseEnter:Connect(function() Utils.Tween(card, {BackgroundColor3=Colors.Hover}, 0.15) end)
             card.MouseLeave:Connect(function() Utils.Tween(card, {BackgroundColor3=Colors.Element}, 0.15) end)
             card.MouseButton1Click:Connect(function()
                 if item.action then item.action() end
                 Utils.Tween(card, {BackgroundColor3=Colors.Active}, 0.1)
-                task.wait(0.1); Utils.Tween(card, {BackgroundColor3=Colors.Hover}, 0.15)
+                task.wait(0.1)
+                Utils.Tween(card, {BackgroundColor3=Colors.Hover}, 0.15)
             end)
         end
         
