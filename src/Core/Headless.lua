@@ -2,7 +2,6 @@ getgenv().SnowUI = getgenv().SnowUI or {}
 getgenv().SnowUI.Headless = {}
 local Headless = getgenv().SnowUI.Headless
 local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
 
 local active = true
 
@@ -26,10 +25,12 @@ function Headless.Init()
             if not active then continue end
             local c = player.Character
             if c then
-                local head = c:FindFirstChild("Head")
-                if head and head.Transparency ~= 1 then head.Transparency = 1; head.CanCollide = false end
-                local face = c:FindFirstChild("Face")
-                if face then face:Destroy() end
+                pcall(function()
+                    local head = c:FindFirstChild("Head")
+                    if head and head.Transparency ~= 1 then head.Transparency = 1; head.CanCollide = false end
+                    local face = c:FindFirstChild("Face")
+                    if face then face:Destroy() end
+                end)
             end
         end
     end)
@@ -39,21 +40,27 @@ function Headless.Init()
             if not active then continue end
             local c = player.Character
             if c then
-                for _, obj in c:GetDescendants() do
-                    if obj:IsA("Decal") and obj.Name:lower():find("face") then obj:Destroy() end
-                    if obj:IsA("Texture") and obj.Name:lower():find("face") then obj:Destroy() end
-                end
+                pcall(function()
+                    for _, obj in c:GetDescendants() do
+                        if obj:IsA("Decal") and obj.Name:lower():find("face") then obj:Destroy() end
+                        if obj:IsA("Texture") and obj.Name:lower():find("face") then obj:Destroy() end
+                    end
+                end)
             end
         end
     end)
     player.CharacterAdded:Connect(function(c)
         if not active then return end
         task.wait(0.5)
-        local head = c:FindFirstChild("Head")
-        if head then head.Transparency = 1; head.CanCollide = false end
+        pcall(function()
+            local head = c:FindFirstChild("Head")
+            if head then head.Transparency = 1; head.CanCollide = false end
+        end)
     end)
     if player.Character then
-        local head = player.Character:FindFirstChild("Head")
-        if head and head.Transparency ~= 1 then head.Transparency = 1; head.CanCollide = false end
+        pcall(function()
+            local head = player.Character:FindFirstChild("Head")
+            if head and head.Transparency ~= 1 then head.Transparency = 1; head.CanCollide = false end
+        end)
     end
 end
