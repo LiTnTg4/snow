@@ -1,34 +1,25 @@
 getgenv().SnowUI = getgenv().SnowUI or {}
 getgenv().SnowUI.Sensitivity = {}
-local Sensitivity = getgenv().SnowUI.Sensitivity
-local UserInputService = game:GetService("UserInputService")
-local Players = game:GetService("Players")
-
-local currentSensitivity = 1
-
-function Sensitivity.Set(value)
-    currentSensitivity = math.clamp(value, 0.1, 10)
-end
-
-function Sensitivity.Get()
-    return currentSensitivity
-end
-
-function Sensitivity.Init()
-    local player = Players.LocalPlayer
-    local playerScripts = player:FindFirstChild("PlayerScripts")
-    if playerScripts then
-        local playerModule = playerScripts:FindFirstChild("PlayerModule")
-        if playerModule then
-            local cameraModule = playerModule:FindFirstChild("CameraModule")
-            if cameraModule then
-                local cameraInput = cameraModule:FindFirstChild("CameraInput")
-                if cameraInput then
-                    local camInputModule = require(cameraInput)
-                    local orig = camInputModule.getRotation
-                    camInputModule.getRotation = function(dr)
+local S = getgenv().SnowUI.Sensitivity
+local UIS = game:GetService("UserInputService")
+local P = game:GetService("Players")
+local cur = 1
+function S.Set(v) cur = math.clamp(v, 0.1, 10) end
+function S.Get() return cur end
+function S.Init()
+    local ps = P.LocalPlayer:FindFirstChild("PlayerScripts")
+    if ps then
+        local pm = ps:FindFirstChild("PlayerModule")
+        if pm then
+            local cm = pm:FindFirstChild("CameraModule")
+            if cm then
+                local ci = cm:FindFirstChild("CameraInput")
+                if ci then
+                    local cim = require(ci)
+                    local orig = cim.getRotation
+                    cim.getRotation = function(dr)
                         local rot = orig(dr)
-                        if UserInputService.TouchEnabled then return rot * currentSensitivity end
+                        if UIS.TouchEnabled then return rot * cur end
                         return rot
                     end
                     return
@@ -37,11 +28,9 @@ function Sensitivity.Init()
         end
     end
     pcall(function()
-        local oldIndex = hookmetamethod(game, "__index", function(self, key)
-            if self == UserInputService and key == "MouseDelta" and UserInputService.TouchEnabled then
-                return oldIndex(self, key) * currentSensitivity
-            end
-            return oldIndex(self, key)
+        local oi = hookmetamethod(game, "__index", function(self, key)
+            if self == UIS and key == "MouseDelta" and UIS.TouchEnabled then return oi(self, key) * cur end
+            return oi(self, key)
         end)
     end)
 end
