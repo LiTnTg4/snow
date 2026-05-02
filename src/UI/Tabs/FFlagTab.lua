@@ -6,32 +6,95 @@ function FFlagTab.Create(parent, Colors, Utils, Toast, FFlagTool)
     local content, list, fflagInput = nil, nil, nil
     
     local function createContentFrame(contentArea)
-        content = Utils.Create("ScrollingFrame", {
-            Size = UDim2.new(1, -16, 1, -16), Position = UDim2.new(0, 8, 0, 8),
-            BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 3,
-            ScrollBarImageColor3 = Colors.Element, CanvasSize = UDim2.new(0, 0, 0, 0),
-            ZIndex = 22, Parent = contentArea,
-        })
-        list = Utils.Create("UIListLayout", {SortOrder=Enum.SortOrder.LayoutOrder, Padding=UDim.new(0,8), Parent=content})
-        Utils.Create("UIPadding", {PaddingTop=UDim.new(0,4),PaddingLeft=UDim.new(0,4),PaddingRight=UDim.new(0,4),PaddingBottom=UDim.new(0,4), Parent=content})
+        content = Instance.new("ScrollingFrame")
+        content.Size = UDim2.new(1, -16, 1, -16)
+        content.Position = UDim2.new(0, 8, 0, 8)
+        content.BackgroundTransparency = 1
+        content.BorderSizePixel = 0
+        content.ScrollBarThickness = 3
+        content.ScrollBarImageColor3 = Colors.Element
+        content.CanvasSize = UDim2.new(0, 0, 0, 0)
+        content.ZIndex = 22
+        content.Parent = contentArea
+        
+        list = Instance.new("UIListLayout")
+        list.SortOrder = Enum.SortOrder.LayoutOrder
+        list.Padding = UDim.new(0, 8)
+        list.Parent = content
+        
+        local pad = Instance.new("UIPadding")
+        pad.PaddingTop = UDim.new(0, 4)
+        pad.PaddingLeft = UDim.new(0, 4)
+        pad.PaddingRight = UDim.new(0, 4)
+        pad.PaddingBottom = UDim.new(0, 4)
+        pad.Parent = content
     end
     
     local function populate()
-        local card = Utils.Create("Frame", {Size=UDim2.new(1,0,0,240),BackgroundColor3=Colors.Element,BorderSizePixel=0,ZIndex=23,Parent=content,Corner=6})
-        Utils.Create("TextLabel", {Size=UDim2.new(0,200,0,20),Position=UDim2.new(0,14,0,12),BackgroundTransparency=1,Text="FFlags.json 粘贴工具",TextColor3=Colors.TextDim,TextSize=13,Font=Enum.Font.GothamBold,TextXAlignment=Enum.TextXAlignment.Left,ZIndex=24,Parent=card})
+        local card = Instance.new("Frame")
+        card.Size = UDim2.new(1, 0, 0, 240)
+        card.BackgroundColor3 = Colors.Element
+        card.BorderSizePixel = 0
+        card.ZIndex = 23
+        card.Parent = content
+        local cc = Instance.new("UICorner"); cc.CornerRadius = UDim.new(0, 6); cc.Parent = card
         
-        fflagInput = Utils.Create("TextBox", {
-            Size=UDim2.new(1,-28,0,140),Position=UDim2.new(0,14,0,40),BackgroundColor3=Colors.Base,
-            BorderSizePixel=0,Text="",PlaceholderText="粘贴 FFlags.json 内容...",PlaceholderColor3=Colors.TextMuted,
-            TextColor3=Colors.Text,TextSize=12,Font=Enum.Font.Gotham,TextXAlignment=Enum.TextXAlignment.Left,
-            TextYAlignment=Enum.TextYAlignment.Top,TextWrapped=true,ClearTextOnFocus=false,ZIndex=24,Parent=card,Corner=4,
-        })
+        local tl = Instance.new("TextLabel")
+        tl.Size = UDim2.new(0, 200, 0, 20)
+        tl.Position = UDim2.new(0, 14, 0, 12)
+        tl.BackgroundTransparency = 1
+        tl.Text = "FFlags.json 粘贴工具"
+        tl.TextColor3 = Colors.TextDim
+        tl.TextSize = 13
+        tl.Font = Enum.Font.GothamBold
+        tl.TextXAlignment = Enum.TextXAlignment.Left
+        tl.ZIndex = 24
+        tl.Parent = card
         
-        local btnContainer = Utils.Create("Frame", {Size=UDim2.new(1,-28,0,34),Position=UDim2.new(0,14,0,190),BackgroundTransparency=1,ZIndex=24,Parent=card})
-        Utils.Create("UIListLayout", {FillDirection=Enum.FillDirection.Horizontal,SortOrder=Enum.SortOrder.LayoutOrder,Padding=UDim.new(0,6),Parent=btnContainer})
+        fflagInput = Instance.new("TextBox")
+        fflagInput.Size = UDim2.new(1, -28, 0, 140)
+        fflagInput.Position = UDim2.new(0, 14, 0, 40)
+        fflagInput.BackgroundColor3 = Colors.Base
+        fflagInput.BorderSizePixel = 0
+        fflagInput.PlaceholderText = "粘贴 FFlags.json 内容..."
+        fflagInput.PlaceholderColor3 = Colors.TextMuted
+        fflagInput.TextColor3 = Colors.Text
+        fflagInput.TextSize = 12
+        fflagInput.Font = Enum.Font.Gotham
+        fflagInput.TextXAlignment = Enum.TextXAlignment.Left
+        fflagInput.TextYAlignment = Enum.TextYAlignment.Top
+        fflagInput.TextWrapped = true
+        fflagInput.ClearTextOnFocus = false
+        fflagInput.ZIndex = 24
+        fflagInput.Parent = card
+        local ic = Instance.new("UICorner"); ic.CornerRadius = UDim.new(0, 4); ic.Parent = fflagInput
+        
+        local btnContainer = Instance.new("Frame")
+        btnContainer.Size = UDim2.new(1, -28, 0, 34)
+        btnContainer.Position = UDim2.new(0, 14, 0, 190)
+        btnContainer.BackgroundTransparency = 1
+        btnContainer.ZIndex = 24
+        btnContainer.Parent = card
+        
+        local bl = Instance.new("UIListLayout")
+        bl.FillDirection = Enum.FillDirection.Horizontal
+        bl.SortOrder = Enum.SortOrder.LayoutOrder
+        bl.Padding = UDim.new(0, 6)
+        bl.Parent = btnContainer
         
         local function createBtn(text, color, action)
-            local btn = Utils.Create("TextButton", {Size=UDim2.new(0,100,1,0),BackgroundColor3=color,BorderSizePixel=0,Text=text,TextColor3=Color3.new(1,1,1),TextSize=12,Font=Enum.Font.GothamBold,AutoButtonColor=false,ZIndex=25,Parent=btnContainer,Corner=4})
+            local btn = Instance.new("TextButton")
+            btn.Size = UDim2.new(0, 100, 1, 0)
+            btn.BackgroundColor3 = color
+            btn.BorderSizePixel = 0
+            btn.Text = text
+            btn.TextColor3 = Color3.new(1, 1, 1)
+            btn.TextSize = 12
+            btn.Font = Enum.Font.GothamBold
+            btn.AutoButtonColor = false
+            btn.ZIndex = 25
+            btn.Parent = btnContainer
+            local bc = Instance.new("UICorner"); bc.CornerRadius = UDim.new(0, 4); bc.Parent = btn
             btn.MouseButton1Click:Connect(action)
         end
         
