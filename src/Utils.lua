@@ -10,8 +10,28 @@ function Utils.Create(className, props)
             local c = Instance.new("UICorner")
             c.CornerRadius = UDim.new(0, v)
             c.Parent = obj
+        elseif k == "MouseButton1Click" then
+            if obj:IsA("GuiButton") then
+                obj.MouseButton1Click:Connect(v)
+            end
+        elseif k == "MouseEnter" then
+            if obj:IsA("GuiButton") then
+                obj.MouseEnter:Connect(v)
+            end
+        elseif k == "MouseLeave" then
+            if obj:IsA("GuiButton") then
+                obj.MouseLeave:Connect(v)
+            end
+        elseif k == "InputBegan" then
+            if obj:IsA("GuiObject") then
+                obj.InputBegan:Connect(v)
+            end
+        elseif k == "FocusLost" then
+            if obj:IsA("TextBox") then
+                obj.FocusLost:Connect(v)
+            end
         else
-            obj[k] = v
+            pcall(function() obj[k] = v end)
         end
     end
     return obj
