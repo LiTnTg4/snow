@@ -6,13 +6,13 @@ local HttpService = game:GetService("HttpService")
 local saveFile = "FFlagPaste_saved.json"
 
 function FFlagTool.Apply(jsonText)
-    if not setfflag then return false, "执行器不支持setfflag" end
+    if not setfflag then return false, "不支持setfflag" end
     local success, data = pcall(function() return HttpService:JSONDecode(jsonText) end)
-    if not success then return false, "JSON格式错误" end
+    if not success then return false, "JSON错误" end
     local count = 0
     for flag, value in pairs(data) do
         pcall(function()
-            local clean = flag:gsub("DFInt", ""):gsub("DFFlag", ""):gsub("FFlag", ""):gsub("FInt", "")
+            local clean = flag:gsub("DFInt",""):gsub("DFFlag",""):gsub("FFlag",""):gsub("FInt","")
             setfflag(clean, tostring(value))
             count = count + 1
         end)
