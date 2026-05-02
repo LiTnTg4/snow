@@ -25,15 +25,13 @@ function Toast.Show(title, message, duration)
     titleLabel.Size = UDim2.new(1, -20, 0, 22); titleLabel.Position = UDim2.new(0, 10, 0, 8)
     titleLabel.BackgroundTransparency = 1; titleLabel.Text = title or "提示"
     titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255); titleLabel.TextSize = 14
-    titleLabel.Font = Enum.Font.GothamBold; titleLabel.TextXAlignment = Enum.TextXAlignment.Left
-    titleLabel.ZIndex = 201; titleLabel.Parent = frame
+    titleLabel.Font = Enum.Font.GothamBold; titleLabel.ZIndex = 201; titleLabel.Parent = frame
     
     local msgLabel = Instance.new("TextLabel")
     msgLabel.Size = UDim2.new(1, -20, 0, 18); msgLabel.Position = UDim2.new(0, 10, 0, 32)
     msgLabel.BackgroundTransparency = 1; msgLabel.Text = message or ""
     msgLabel.TextColor3 = Color3.fromRGB(180, 180, 190); msgLabel.TextSize = 12
-    msgLabel.Font = Enum.Font.Gotham; msgLabel.TextXAlignment = Enum.TextXAlignment.Left
-    msgLabel.ZIndex = 201; msgLabel.Parent = frame
+    msgLabel.Font = Enum.Font.Gotham; msgLabel.ZIndex = 201; msgLabel.Parent = frame
     
     TweenService:Create(frame, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
         Position = UDim2.new(0.5, -130, 0.85, 0), BackgroundTransparency = 0.2,
