@@ -1,8 +1,9 @@
--- 灵敏度控制核心
+getgenv().SnowUI = getgenv().SnowUI or {}
+getgenv().SnowUI.Sensitivity = {}
+local Sensitivity = getgenv().SnowUI.Sensitivity
 local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
 
-local Sensitivity = {}
 local currentSensitivity = 1
 
 function Sensitivity.Set(value)
@@ -27,12 +28,10 @@ function Sensitivity.Init()
                     local orig = camInputModule.getRotation
                     camInputModule.getRotation = function(dr)
                         local rot = orig(dr)
-                        if UserInputService.TouchEnabled then
-                            return rot * currentSensitivity
-                        end
+                        if UserInputService.TouchEnabled then return rot * currentSensitivity end
                         return rot
                     end
-                    return true
+                    return
                 end
             end
         end
@@ -43,7 +42,4 @@ function Sensitivity.Init()
         end
         return oldIndex(self, key)
     end)
-    return true
 end
-
-return Sensitivity
