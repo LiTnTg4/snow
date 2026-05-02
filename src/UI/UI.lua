@@ -57,6 +57,8 @@ local function BuildUI(container)
     Utils.Create("TextLabel", {Size=UDim2.new(0,120,0,20),Position=UDim2.new(0,14,0.5,-10),BackgroundTransparency=1,Text="控制面板",TextColor3=C.Text,TextSize=14,Font=Enum.Font.GothamBold,TextXAlignment=Enum.TextXAlignment.Left,ZIndex=22,Parent=TitleBar})
     
     local NoticeBtn = Utils.Create("TextButton", {Size=UDim2.new(0,56,0,26),Position=UDim2.new(1,-124,0.5,-13),BackgroundColor3=C.Warning,BorderSizePixel=0,Text="公告",TextColor3=Color3.fromRGB(20,20,25),TextSize=12,Font=Enum.Font.GothamBold,AutoButtonColor=false,ZIndex=22,Parent=TitleBar,Corner=6})
+    
+    -- 关闭按钮 - 修复：确保是TextButton
     local CloseBtn = Utils.Create("TextButton", {Size=UDim2.new(0,28,0,28),Position=UDim2.new(1,-38,0.5,-14),BackgroundColor3=C.Element,BorderSizePixel=0,Text="X",TextColor3=C.TextDim,TextSize=14,Font=Enum.Font.GothamMedium,AutoButtonColor=false,ZIndex=22,Parent=TitleBar,Corner=14})
     CloseBtn.MouseEnter:Connect(function() Utils.Tween(CloseBtn,{BackgroundColor3=C.Danger},0.15) end)
     CloseBtn.MouseLeave:Connect(function() Utils.Tween(CloseBtn,{BackgroundColor3=C.Element},0.15) end)
@@ -69,13 +71,24 @@ local function BuildUI(container)
     
     local ContentArea = Utils.Create("Frame", {Size=UDim2.new(1,0,1,-82),Position=UDim2.new(0,0,0,82),BackgroundColor3=C.Base,BorderSizePixel=0,ZIndex=21,Parent=Panel})
     
-    -- 标签按钮
+    -- 标签按钮 - 修复：确保是TextButton类型，不是Frame
     for i, id in ipairs(Config.TabIDs) do
-        local btn = Utils.Create("TextButton", {
-            Size=UDim2.new(0,60,0,32),BackgroundColor3=i==1 and C.Active or C.Panel,BorderSizePixel=0,
-            Text=Config.TabNames[i],TextColor3=i==1 and C.Text or C.TextDim,TextSize=13,
-            Font=Enum.Font.GothamMedium,AutoButtonColor=false,ZIndex=22,Parent=TabContainer,Corner=6,
-        })
+        local btn = Instance.new("TextButton")
+        btn.Size = UDim2.new(0, 60, 0, 32)
+        btn.BackgroundColor3 = i == 1 and C.Active or C.Panel
+        btn.BorderSizePixel = 0
+        btn.Text = Config.TabNames[i]
+        btn.TextColor3 = i == 1 and C.Text or C.TextDim
+        btn.TextSize = 13
+        btn.Font = Enum.Font.GothamMedium
+        btn.AutoButtonColor = false
+        btn.ZIndex = 22
+        btn.Parent = TabContainer
+        
+        local btnCorner = Instance.new("UICorner")
+        btnCorner.CornerRadius = UDim.new(0, 6)
+        btnCorner.Parent = btn
+        
         btn.MouseEnter:Connect(function() if id~=currentTab then Utils.Tween(btn,{BackgroundColor3=C.Hover},0.15) end end)
         btn.MouseLeave:Connect(function() if id~=currentTab then Utils.Tween(btn,{BackgroundColor3=C.Panel},0.15) end end)
         btn.MouseButton1Click:Connect(function() SwitchTab(id) end)
