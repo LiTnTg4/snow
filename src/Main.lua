@@ -1,80 +1,42 @@
 -- Snow UI 主入口
-local Players = game:GetService("Players")
-local PlayerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
-
+local P = game:GetService("Players")
+local PG = P.LocalPlayer:WaitForChild("PlayerGui")
 getgenv().SnowUI = getgenv().SnowUI or {}
 
--- 清理所有旧UI
-local oldMinimal = PlayerGui:FindFirstChild("MinimalUI")
-if oldMinimal then oldMinimal:Destroy() end
-
-local oldAccessory = PlayerGui:FindFirstChild("AccessoryToggleGui")
-if oldAccessory then oldAccessory:Destroy() end
-
-local oldPerf = PlayerGui:FindFirstChild("PerfMonitor")
-if oldPerf then oldPerf:Destroy() end
-
-local oldFFlag = PlayerGui:FindFirstChild("FFlagPasteTool")
-if oldFFlag then oldFFlag:Destroy() end
-
-local baseURL = "https://raw.githubusercontent.com/LiTnTg4/snow/main/src"
-
-local loadOrder = {
-    "Config.lua", "Utils.lua",
-    "Core/Sensitivity.lua", "Core/Headless.lua", "Core/BrokenLegs.lua",
-    "Core/Graphics.lua", "Core/Accessories.lua",
-    "FF/FFlagTool.lua",
-    "UI/Toast.lua", "UI/PerfButton.lua", "UI/Notice.lua",
-    "UI/Tabs/FunctionsTab.lua", "UI/Tabs/FFlagTab.lua",
-    "UI/Tabs/SensitivityTab.lua", "UI/Tabs/AccessoriesTab.lua",
-    "UI/Tabs/SettingsTab.lua", "UI/UI.lua",
-}
-
-for _, fileName in ipairs(loadOrder) do
-    local url = baseURL .. "/" .. fileName
+local function loadOne(url)
     local ok, code = pcall(function() return game:HttpGet(url) end)
     if ok and code then
         local fn, err = loadstring(code)
-        if fn then
-            local s, r = pcall(fn)
-            if s then print("[OK] " .. fileName) else warn("[ERR] " .. fileName .. ": " .. tostring(r)) end
-        else warn("[SYN] " .. fileName .. ": " .. err) end
-    else warn("[NET] " .. fileName) end
+        if fn then pcall(fn) end
+    end
 end
 
-task.wait(1)
+local base = "https://raw.githubusercontent.com/LiTnTg4/snow/main/src"
+local order = {"Config.lua","Utils.lua","Core/Sensitivity.lua","Core/Headless.lua","Core/BrokenLegs.lua","Core/Graphics.lua","Core/Accessories.lua","FF/FFlagTool.lua","UI/Toast.lua","UI/PerfButton.lua","UI/Notice.lua","UI/Tabs/FunctionsTab.lua","UI/Tabs/FFlagTab.lua","UI/Tabs/SensitivityTab.lua","UI/Tabs/AccessoriesTab.lua","UI/Tabs/SettingsTab.lua","UI/UI.lua"}
+for _, f in ipairs(order) do loadOne(base.."/"..f) end
+
+task.wait(2)
 local M = getgenv().SnowUI
 
-local UI = Instance.new("ScreenGui")
-UI.Name = "MinimalUI"; UI.Parent = PlayerGui
-UI.ResetOnSpawn = false; UI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling; UI.IgnoreGuiInset = true
+local old = PG:FindFirstChild("MinimalUI"); if old then old:Destroy() end
+local old2 = PG:FindFirstChild("AccessoryToggleGui"); if old2 then old2:Destroy() end
+local old3 = PG:FindFirstChild("PerfMonitor"); if old3 then old3:Destroy() end
+
+local UI = Instance.new("ScreenGui"); UI.Name="MinimalUI"; UI.Parent=PG; UI.ResetOnSpawn=false; UI.ZIndexBehavior=Enum.ZIndexBehavior.Sibling; UI.IgnoreGuiInset=true
 
 M.Sensitivity.Init(); M.Headless.Init(); M.BrokenLegs.Init(); M.Accessories.Init()
 
-local uiInstance = M.Build(UI)
-
-local perfDrag, perfBtn = M.PerfButton.Create(UI, function()
-    if uiInstance.IsVisible() then uiInstance.Close() else uiInstance.Open() end
-end)
-
-uiInstance.CloseBtn.MouseButton1Click:Connect(function() uiInstance.Close() end)
+local ui = M.Build(UI)
+local pDrag, pBtn = M.PerfButton.Create(UI, function() if ui.IsVisible() then ui.Close() else ui.Open() end end)
+ui.CloseBtn.MouseButton1Click:Connect(function() ui.Close() end)
 
 game:GetService("UserInputService").InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 and uiInstance.IsVisible() then
+    if input.UserInputType==Enum.UserInputType.MouseButton1 and ui.IsVisible() then
         local pos = game:GetService("UserInputService"):GetMouseLocation()
-        local objs = PlayerGui:GetGuiObjectsAtPosition(pos.X, pos.Y)
+        local objs = PG:GetGuiObjectsAtPosition(pos.X, pos.Y)
         local inside = false
-        for _, obj in ipairs(objs) do
-            if obj == uiInstance.Panel or obj:IsDescendantOf(uiInstance.Panel)
-                or obj == perfDrag or obj:IsDescendantOf(perfDrag) then
-                inside = true; break
-            end
-        end
-        if not inside then uiInstance.Close() end
+        for _, obj in ipairs(objs) do if obj==ui.Panel or obj:IsDescendantOf(ui.Panel) or obj==pDrag or obj:IsDescendantOf(pDrag) then inside=true; break end end
+        if not inside then ui.Close() end
     end
 end)
-
-print("============================================")
-print("  Snow UI v4.0 Ready")
-print("  Click FPS display to open")
-print("============================================")
+print("Snow UI Ready")
