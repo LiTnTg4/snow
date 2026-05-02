@@ -1,7 +1,7 @@
--- 工具函数
+getgenv().SnowUI = getgenv().SnowUI or {}
+getgenv().SnowUI.Utils = {}
+local Utils = getgenv().SnowUI.Utils
 local TweenService = game:GetService("TweenService")
-
-local Utils = {}
 
 function Utils.Create(className, props)
     local obj = Instance.new(className)
@@ -25,9 +25,3 @@ function Utils.Tween(obj, props, duration, easing, direction)
     t:Play()
     return t
 end
-
-function Utils.GetCharacter(player)
-    return player.Character
-end
-
-return Utils
