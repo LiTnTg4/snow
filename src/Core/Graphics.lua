@@ -3,7 +3,6 @@ getgenv().SnowUI.Graphics = {}
 local Graphics = getgenv().SnowUI.Graphics
 local Players = game:GetService("Players")
 local Lighting = game:GetService("Lighting")
-local UserSettings = game:GetService("UserSettings")
 
 local active = false
 local savedMaterials = {}
@@ -23,7 +22,7 @@ function Graphics.Enable()
         for _, v in Lighting:GetChildren() do if v:IsA("PostEffect") then v.Enabled = false end end
     end)
     pcall(function()
-        local ugs = UserSettings:GetService("UserGameSettings")
+        local ugs = game:GetService("UserSettings"):GetService("UserGameSettings")
         ugs.GraphicsQuality = Enum.GraphicsQuality.Level01
         ugs.RenderScale = 0.2
         ugs.Shadows = false
@@ -46,7 +45,7 @@ end
 function Graphics.Disable()
     pcall(function() Lighting.GlobalShadows = true; Lighting.FogEnabled = true end)
     pcall(function()
-        local ugs = UserSettings:GetService("UserGameSettings")
+        local ugs = game:GetService("UserSettings"):GetService("UserGameSettings")
         ugs.GraphicsQuality = Enum.GraphicsQuality.Automatic
         ugs.RenderScale = 1; ugs.Shadows = true; ugs.TextureQuality = Enum.TextureQuality.Automatic
     end)
