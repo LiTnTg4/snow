@@ -28,7 +28,12 @@ function Accessories.ApplyType(accType, isVisible)
     if not c then return end
     for _, child in pairs(c:GetChildren()) do
         if child:IsA("Accessory") and child.AccessoryType == accType then
-            if child:FindFirstChild("Handle") then child.Handle.Transparency = isVisible and 0 or 1 end
+            pcall(function()
+                local handle = child:FindFirstChild("Handle")
+                if handle then
+                    handle.Transparency = isVisible and 0 or 1
+                end
+            end)
         end
     end
 end
@@ -39,7 +44,12 @@ function Accessories.RefreshAll()
     for _, config in ipairs(slotConfig) do
         for _, child in pairs(c:GetChildren()) do
             if child:IsA("Accessory") and child.AccessoryType == config.type then
-                if child:FindFirstChild("Handle") then child.Handle.Transparency = visibility[config.type] and 0 or 1 end
+                pcall(function()
+                    local handle = child:FindFirstChild("Handle")
+                    if handle then
+                        handle.Transparency = visibility[config.type] and 0 or 1
+                    end
+                end)
             end
         end
     end
@@ -49,27 +59,33 @@ function Accessories.Init()
     local player = Players.LocalPlayer
     task.spawn(function()
         while true do
-            local c = player.Character
-            if c then
-                for _, child in pairs(c:GetChildren()) do
-                    if child:IsA("Accessory") and child:FindFirstChild("Handle") then
-                        if not visibility[child.AccessoryType] and child.Handle.Transparency ~= 1 then
-                            child.Handle.Transparency = 1
+            pcall(function()
+                local c = player.Character
+                if c then
+                    for _, child in pairs(c:GetChildren()) do
+                        if child:IsA("Accessory") then
+                            local handle = child:FindFirstChild("Handle")
+                            if handle and not visibility[child.AccessoryType] and handle.Transparency ~= 1 then
+                                handle.Transparency = 1
+                            end
                         end
                     end
                 end
-            end
+            end)
             RunService.Heartbeat:Wait()
         end
     end)
     player.CharacterAdded:Connect(function(c)
-        c:WaitForChild("Head", 5)
+        task.wait(0.5)
         Accessories.RefreshAll()
         c.ChildAdded:Connect(function(child)
             if child:IsA("Accessory") then
                 if not visibility[child.AccessoryType] then
-                    child:WaitForChild("Handle", 2)
-                    if child:FindFirstChild("Handle") then child.Handle.Transparency = 1 end
+                    task.wait(0.5)
+                    pcall(function()
+                        local handle = child:FindFirstChild("Handle")
+                        if handle then handle.Transparency = 1 end
+                    end)
                 end
             end
         end)
