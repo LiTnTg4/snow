@@ -3,7 +3,8 @@ local M = getgenv().SnowUI
 local FFlagTab = {}
 
 function FFlagTab.Create(parent, Colors, Utils, Toast, FFlagTool)
-    local content, list, fflagInput = nil, nil, nil
+    local content
+    local fflagInput
     
     local function createContentFrame(contentArea)
         content = Instance.new("ScrollingFrame")
@@ -17,7 +18,7 @@ function FFlagTab.Create(parent, Colors, Utils, Toast, FFlagTool)
         content.ZIndex = 22
         content.Parent = contentArea
         
-        list = Instance.new("UIListLayout")
+        local list = Instance.new("UIListLayout")
         list.SortOrder = Enum.SortOrder.LayoutOrder
         list.Padding = UDim.new(0, 8)
         list.Parent = content
@@ -28,6 +29,8 @@ function FFlagTab.Create(parent, Colors, Utils, Toast, FFlagTool)
         pad.PaddingRight = UDim.new(0, 4)
         pad.PaddingBottom = UDim.new(0, 4)
         pad.Parent = content
+        
+        content.List = list
     end
     
     local function populate()
@@ -112,9 +115,11 @@ function FFlagTab.Create(parent, Colors, Utils, Toast, FFlagTool)
         
         task.delay(0.3, function() local s=FFlagTool.Load(); if s then fflagInput.Text=s end end)
         
-        list:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-            content.CanvasSize = UDim2.new(0,0,0,list.AbsoluteContentSize.Y+8)
-        end)
+        if content.List then
+            content.List:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+                content.CanvasSize = UDim2.new(0,0,0,content.List.AbsoluteContentSize.Y+8)
+            end)
+        end
     end
     
     return {createContentFrame=createContentFrame, populate=populate}
