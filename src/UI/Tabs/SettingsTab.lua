@@ -7,14 +7,28 @@ function SettingsTab.Create(parent, Colors, Utils, Toast, Defaults, SavedConfig,
     local WInput, HInput = nil, nil
     
     local function createContentFrame(contentArea)
-        content = Utils.Create("ScrollingFrame", {
-            Size = UDim2.new(1, -16, 1, -16), Position = UDim2.new(0, 8, 0, 8),
-            BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 3,
-            ScrollBarImageColor3 = Colors.Element, CanvasSize = UDim2.new(0, 0, 0, 0),
-            ZIndex = 22, Parent = contentArea,
-        })
-        list = Utils.Create("UIListLayout", {SortOrder=Enum.SortOrder.LayoutOrder, Padding=UDim.new(0,8), Parent=content})
-        Utils.Create("UIPadding", {PaddingTop=UDim.new(0,4),PaddingLeft=UDim.new(0,4),PaddingRight=UDim.new(0,4),PaddingBottom=UDim.new(0,4), Parent=content})
+        content = Instance.new("ScrollingFrame")
+        content.Size = UDim2.new(1, -16, 1, -16)
+        content.Position = UDim2.new(0, 8, 0, 8)
+        content.BackgroundTransparency = 1
+        content.BorderSizePixel = 0
+        content.ScrollBarThickness = 3
+        content.ScrollBarImageColor3 = Colors.Element
+        content.CanvasSize = UDim2.new(0, 0, 0, 0)
+        content.ZIndex = 22
+        content.Parent = contentArea
+        
+        list = Instance.new("UIListLayout")
+        list.SortOrder = Enum.SortOrder.LayoutOrder
+        list.Padding = UDim.new(0, 8)
+        list.Parent = content
+        
+        local pad = Instance.new("UIPadding")
+        pad.PaddingTop = UDim.new(0, 4)
+        pad.PaddingLeft = UDim.new(0, 4)
+        pad.PaddingRight = UDim.new(0, 4)
+        pad.PaddingBottom = UDim.new(0, 4)
+        pad.Parent = content
     end
     
     local function ApplySize()
@@ -33,30 +47,85 @@ function SettingsTab.Create(parent, Colors, Utils, Toast, Defaults, SavedConfig,
         local ScreenW = Camera.ViewportSize.X
         local ScreenH = Camera.ViewportSize.Y
         
-        local card = Utils.Create("Frame", {
-            Size = UDim2.new(1, 0, 0, 160), BackgroundColor3 = Colors.Element,
-            BorderSizePixel = 0, ZIndex = 23, Parent = content, Corner = 6,
-        })
+        local card = Instance.new("Frame")
+        card.Size = UDim2.new(1, 0, 0, 160)
+        card.BackgroundColor3 = Colors.Element
+        card.BorderSizePixel = 0
+        card.ZIndex = 23
+        card.Parent = content
+        local cc = Instance.new("UICorner"); cc.CornerRadius = UDim.new(0, 6); cc.Parent = card
         
-        Utils.Create("TextLabel", {
-            Size = UDim2.new(0, 150, 0, 20), Position = UDim2.new(0, 14, 0, 12),
-            BackgroundTransparency = 1, Text = "自定义尺寸", TextColor3 = Colors.TextDim,
-            TextSize = 13, Font = Enum.Font.GothamBold, ZIndex = 24, Parent = card,
-        })
-        Utils.Create("TextLabel", {
-            Size = UDim2.new(1, -28, 0, 16), Position = UDim2.new(0, 14, 0, 34),
-            BackgroundTransparency = 1, Text = "屏幕: " .. ScreenW .. "x" .. ScreenH,
-            TextColor3 = Colors.TextMuted, TextSize = 10, Font = Enum.Font.Gotham,
-            TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 24, Parent = card,
-        })
+        local title = Instance.new("TextLabel")
+        title.Size = UDim2.new(0, 150, 0, 20)
+        title.Position = UDim2.new(0, 14, 0, 12)
+        title.BackgroundTransparency = 1
+        title.Text = "自定义尺寸"
+        title.TextColor3 = Colors.TextDim
+        title.TextSize = 13
+        title.Font = Enum.Font.GothamBold
+        title.ZIndex = 24
+        title.Parent = card
         
-        Utils.Create("TextLabel", {Size=UDim2.new(0,40,0,16),Position=UDim2.new(0,14,0,56),BackgroundTransparency=1,Text="宽度",TextColor3=Colors.TextDim,TextSize=11,Font=Enum.Font.Gotham,ZIndex=24,Parent=card})
-        WInput = Utils.Create("TextBox", {Size=UDim2.new(0,90,0,30),Position=UDim2.new(0,60,0,52),BackgroundColor3=Colors.Base,BorderSizePixel=0,Text=tostring(SavedConfig.width),TextColor3=Colors.Text,TextSize=12,Font=Enum.Font.Gotham,ZIndex=24,Parent=card,Corner=4})
+        local info = Instance.new("TextLabel")
+        info.Size = UDim2.new(1, -28, 0, 16)
+        info.Position = UDim2.new(0, 14, 0, 34)
+        info.BackgroundTransparency = 1
+        info.Text = "屏幕: " .. ScreenW .. "x" .. ScreenH
+        info.TextColor3 = Colors.TextMuted
+        info.TextSize = 10
+        info.Font = Enum.Font.Gotham
+        info.TextXAlignment = Enum.TextXAlignment.Left
+        info.ZIndex = 24
+        info.Parent = card
         
-        Utils.Create("TextLabel", {Size=UDim2.new(0,40,0,16),Position=UDim2.new(0,170,0,56),BackgroundTransparency=1,Text="高度",TextColor3=Colors.TextDim,TextSize=11,Font=Enum.Font.Gotham,ZIndex=24,Parent=card})
-        HInput = Utils.Create("TextBox", {Size=UDim2.new(0,90,0,30),Position=UDim2.new(0,210,0,52),BackgroundColor3=Colors.Base,BorderSizePixel=0,Text=tostring(SavedConfig.height),TextColor3=Colors.Text,TextSize=12,Font=Enum.Font.Gotham,ZIndex=24,Parent=card,Corner=4})
+        local wLabel = Instance.new("TextLabel")
+        wLabel.Size = UDim2.new(0, 40, 0, 16)
+        wLabel.Position = UDim2.new(0, 14, 0, 56)
+        wLabel.BackgroundTransparency = 1
+        wLabel.Text = "宽度"
+        wLabel.TextColor3 = Colors.TextDim
+        wLabel.TextSize = 11
+        wLabel.Font = Enum.Font.Gotham
+        wLabel.ZIndex = 24
+        wLabel.Parent = card
         
-        -- 应用按钮 - 直接用Instance.new确保类型正确
+        WInput = Instance.new("TextBox")
+        WInput.Size = UDim2.new(0, 90, 0, 30)
+        WInput.Position = UDim2.new(0, 60, 0, 52)
+        WInput.BackgroundColor3 = Colors.Base
+        WInput.BorderSizePixel = 0
+        WInput.Text = tostring(SavedConfig.width)
+        WInput.TextColor3 = Colors.Text
+        WInput.TextSize = 12
+        WInput.Font = Enum.Font.Gotham
+        WInput.ZIndex = 24
+        WInput.Parent = card
+        local wc = Instance.new("UICorner"); wc.CornerRadius = UDim.new(0, 4); wc.Parent = WInput
+        
+        local hLabel = Instance.new("TextLabel")
+        hLabel.Size = UDim2.new(0, 40, 0, 16)
+        hLabel.Position = UDim2.new(0, 170, 0, 56)
+        hLabel.BackgroundTransparency = 1
+        hLabel.Text = "高度"
+        hLabel.TextColor3 = Colors.TextDim
+        hLabel.TextSize = 11
+        hLabel.Font = Enum.Font.Gotham
+        hLabel.ZIndex = 24
+        hLabel.Parent = card
+        
+        HInput = Instance.new("TextBox")
+        HInput.Size = UDim2.new(0, 90, 0, 30)
+        HInput.Position = UDim2.new(0, 210, 0, 52)
+        HInput.BackgroundColor3 = Colors.Base
+        HInput.BorderSizePixel = 0
+        HInput.Text = tostring(SavedConfig.height)
+        HInput.TextColor3 = Colors.Text
+        HInput.TextSize = 12
+        HInput.Font = Enum.Font.Gotham
+        HInput.ZIndex = 24
+        HInput.Parent = card
+        local hc = Instance.new("UICorner"); hc.CornerRadius = UDim.new(0, 4); hc.Parent = HInput
+        
         local applyBtn = Instance.new("TextButton")
         applyBtn.Size = UDim2.new(0, 90, 0, 32)
         applyBtn.Position = UDim2.new(0, 14, 0, 92)
@@ -69,12 +138,9 @@ function SettingsTab.Create(parent, Colors, Utils, Toast, Defaults, SavedConfig,
         applyBtn.AutoButtonColor = false
         applyBtn.ZIndex = 24
         applyBtn.Parent = card
-        local applyCorner = Instance.new("UICorner")
-        applyCorner.CornerRadius = UDim.new(0, 4)
-        applyCorner.Parent = applyBtn
+        local ac = Instance.new("UICorner"); ac.CornerRadius = UDim.new(0, 4); ac.Parent = applyBtn
         applyBtn.MouseButton1Click:Connect(ApplySize)
         
-        -- 重置按钮 - 直接用Instance.new确保类型正确
         local resetBtn = Instance.new("TextButton")
         resetBtn.Size = UDim2.new(0, 90, 0, 32)
         resetBtn.Position = UDim2.new(0, 112, 0, 92)
@@ -87,9 +153,7 @@ function SettingsTab.Create(parent, Colors, Utils, Toast, Defaults, SavedConfig,
         resetBtn.AutoButtonColor = false
         resetBtn.ZIndex = 24
         resetBtn.Parent = card
-        local resetCorner = Instance.new("UICorner")
-        resetCorner.CornerRadius = UDim.new(0, 4)
-        resetCorner.Parent = resetBtn
+        local rc = Instance.new("UICorner"); rc.CornerRadius = UDim.new(0, 4); rc.Parent = resetBtn
         resetBtn.MouseButton1Click:Connect(function()
             local defaultW = math.clamp(math.floor(ScreenW * 0.45), Defaults.MinWidth, Defaults.MaxWidth)
             local defaultH = math.clamp(math.floor(ScreenH * 0.55), Defaults.MinHeight, Defaults.MaxHeight)
@@ -107,9 +171,9 @@ function SettingsTab.Create(parent, Colors, Utils, Toast, Defaults, SavedConfig,
     end
     
     return {
-        createContentFrame = createContentFrame,
-        populate = populate,
-        updateInputs = function()
+        createContentFrame=createContentFrame,
+        populate=populate,
+        updateInputs=function()
             WInput.Text = tostring(SavedConfig.width)
             HInput.Text = tostring(SavedConfig.height)
         end,
