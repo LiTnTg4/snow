@@ -3,7 +3,7 @@ local M = getgenv().SnowUI
 local AccessoriesTab = {}
 
 function AccessoriesTab.Create(parent, Colors, Utils, Toast, Accessories)
-    local content, list = nil, nil
+    local content
     local buttons = {}
     
     local function createContentFrame(contentArea)
@@ -18,7 +18,7 @@ function AccessoriesTab.Create(parent, Colors, Utils, Toast, Accessories)
         content.ZIndex = 22
         content.Parent = contentArea
         
-        list = Instance.new("UIListLayout")
+        local list = Instance.new("UIListLayout")
         list.SortOrder = Enum.SortOrder.LayoutOrder
         list.Padding = UDim.new(0, 8)
         list.Parent = content
@@ -29,6 +29,8 @@ function AccessoriesTab.Create(parent, Colors, Utils, Toast, Accessories)
         pad.PaddingRight = UDim.new(0, 4)
         pad.PaddingBottom = UDim.new(0, 4)
         pad.Parent = content
+        
+        content.List = list
     end
     
     local function populate()
@@ -62,18 +64,20 @@ function AccessoriesTab.Create(parent, Colors, Utils, Toast, Accessories)
             end
             
             btn.MouseButton1Click:Connect(function()
-                local nowVisible = Accessories.Toggle(config.type)
+                Accessories.Toggle(config.type)
                 updateBtn()
-                Toast.Show(config.name, nowVisible and "已显示" or "已隐藏", 1.5)
+                Toast.Show(config.name, Accessories.IsVisible(config.type) and "已显示" or "已隐藏", 1.5)
             end)
             
             buttons[config.type] = updateBtn
             updateBtn()
         end
         
-        list:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-            content.CanvasSize = UDim2.new(0, 0, 0, list.AbsoluteContentSize.Y + 8)
-        end)
+        if content.List then
+            content.List:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+                content.CanvasSize = UDim2.new(0, 0, 0, content.List.AbsoluteContentSize.Y + 8)
+            end)
+        end
     end
     
     local function refreshAll()
