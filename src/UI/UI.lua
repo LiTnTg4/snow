@@ -77,7 +77,7 @@ local function BuildUI(container)
     tabs.settings.createContentFrame(setFrame); tabs.settings.populate()
     
     local notice = M.Notice.Create(Panel, C, Utils)
-    NoticeBtn.MouseButton1Click:Connect(function() notice.setText("Snow UI v4.0\n\nFPS按钮点击打开菜单\n标题栏拖动移动\n\n屏幕: "..SW.."x"..SH); notice.show() end)
+    NoticeBtn.MouseButton1Click:Connect(function() notice.setText("Snow UI v4.0\n\n新KS号id\nKING__VI\n\n屏幕: "..SW.."x"..SH); notice.show() end)
     
     TitleBar.InputBegan:Connect(function(input)
         if input.UserInputType==Enum.UserInputType.MouseButton1 or input.UserInputType==Enum.UserInputType.Touch then
